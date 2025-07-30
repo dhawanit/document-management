@@ -52,8 +52,15 @@ uploads/
 .idea/
 *.swp
 
+# =========================
+# Frontend Specific
+# =========================
+frontend/node_modules/
+frontend/build/
+frontend/.cache/
 
 # =========================
 # TypeScript
 # =========================
 *.tsbuildinfo
+
