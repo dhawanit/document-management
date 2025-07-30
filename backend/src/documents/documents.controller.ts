@@ -33,8 +33,22 @@ export class DocumentsController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() dto: UpdateDocumentDto) {
-    return this.documentsService.update(id, dto);
+  @UseInterceptors(FileInterceptor('file', {
+    storage: diskStorage({
+      destination: './uploads',
+      filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname)
+    })
+  }))
+  async updateDocument(
+    @Req() req,
+    @Param('id') id: string,
+    @Body() body: any,
+    @UploadedFile() file?: Express.Multer.File,
+  ) {
+    return this.documentsService.updateDocument(req.user, id, {
+      title: body.title,
+      description: body.description
+    }, file);
   }
 
   @Delete(':id')
