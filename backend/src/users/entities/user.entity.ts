@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
 
 export enum UserRole {
   ADMIN = 'admin',
@@ -29,4 +29,7 @@ export class User {
 
   @Column({ default: false })
   canTriggerIngestion: boolean;
+
+  @CreateDateColumn()
+  createdAt: Date;
 }

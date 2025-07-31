@@ -1,4 +1,4 @@
-import { Controller, Get, Patch, Param, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, Patch, Param, Body, UseGuards, Query } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { UpdatePermissionsDto } from './dto/update-permissions.dto';
@@ -12,8 +12,14 @@ export class UsersController {
 
   @Get()
   @UseGuards(new RolesGuard(['admin']))
-  async getAllUsers() {
-    return this.usersService.findAll();
+  async getAllUsers(
+    @Query('page') page = '1',
+    @Query('limit') limit = '10',
+    @Query('search') search?: string,
+  ) {
+    const pageNum = parseInt(page, 10);
+    const limitNum = parseInt(limit, 10);
+    return this.usersService.findAll(pageNum, limitNum, search);
   }
 
   @Patch(':id/role')
