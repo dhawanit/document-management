@@ -4,7 +4,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 
 async function bootstrap() {
-  // ✅ Explicitly tell Nest to use Express adapter
+  // Explicitly tell Nest to use Express adapter
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.enableCors({
@@ -13,7 +13,7 @@ async function bootstrap() {
     credentials: true,
   });
 
-  // ✅ Serve static files from "uploads" folder
+  // Serve static files from "uploads" folder
   app.useStaticAssets(join(__dirname, '..', 'uploads'), {
     prefix: '/uploads/', // Accessible via http://localhost:3000/uploads/<filename>
   });
