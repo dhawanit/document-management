@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, ForbiddenException, BadRequestException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { InjectRepository} from '@nestjs/typeorm';
+import { Repository, Like } from 'typeorm';
 import { IngestionLog, IngestionStatus } from './entities/ingestion-log.entity';
 import { Document } from '../documents/entities/document.entity';
 import { User } from '../users/entities/user.entity';
@@ -97,9 +97,44 @@ export class IngestionService {
     return log;
   }
 
-  async getIngestionHistory() {
-    return this.ingestionRepo.find({ relations: ['document', 'user'], order: { createdAt: 'DESC' } });
-  }
+  async getIngestionHistory(page = 1, limit = 50, status?: string, search?: string) {
+    const query = this.ingestionRepo
+      .createQueryBuilder('log')
+      .leftJoinAndSelect('log.document', 'document')
+      .leftJoinAndSelect('log.user', 'user')
+      .orderBy('log.createdAt', 'DESC')
+      .skip((page - 1) * limit)
+      .take(limit);
+  
+    // Filter by status
+    if (status && status !== 'all') {
+      query.andWhere('log.status = :status', { status });
+    }
+  
+    // Search by document title
+    if (search && search.trim() !== '') {
+      query.andWhere('document.title ILIKE :search', { search: `%${search}%` });
+    }
+  
+    const [result, total] = await query.getManyAndCount();
+  
+    const formatted = result.map((log) => ({
+      id: log.id,
+      documentId: log.document?.id || null,
+      documentTitle: log.document?.title || 'Unknown Document',
+      status: log.status,
+      triggeredBy: log.user?.email || 'System',
+      createdAt: log.createdAt,
+    }));
+  
+    return {
+      data: formatted,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    };
+  }    
 
   async retryIngestion(ingestionId: string) {
     const log = await this.getIngestionStatus(ingestionId);
