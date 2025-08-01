@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { fetchUsers, updateUserRole, updateUserPermission } from '../../api/userService';
 import { useAuth } from '../../context/AuthContext';
+import ConfirmDialog from '../../components/common/ConfirmDialog';
 
 export default function UsersPage() {
   const { user } = useAuth();
@@ -11,6 +12,12 @@ export default function UsersPage() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(50);
   const [search, setSearch] = useState('');
+
+  const [confirmDialog, setConfirmDialog] = useState({
+    isOpen: false,
+    message: '',
+    onConfirm: () => {},
+  });
 
   const { data = { data: [], total: 0, totalPages: 1 }, isLoading } = useQuery({
     queryKey: ['users', page, limit, search],
@@ -35,26 +42,34 @@ export default function UsersPage() {
 
   const totalPages = data.totalPages;
 
-  // ✅ Handle role change with confirmation
   const handleRoleChange = (id: string, newRole: string) => {
-    if (window.confirm(`Are you sure you want to change this user's role to '${newRole}'?`)) {
-      roleMutation.mutate({ id, role: newRole });
-    }
+    setConfirmDialog({
+      isOpen: true,
+      message: `Are you sure you want to change this user's role to '${newRole}'?`,
+      onConfirm: () => {
+        roleMutation.mutate({ id, role: newRole });
+        setConfirmDialog({ ...confirmDialog, isOpen: false });
+      },
+    });
   };
 
-  // ✅ Handle grant/revoke ingestion with confirmation
   const handleToggleIngestion = (id: string, currentState: boolean) => {
     const action = currentState ? 'Revoke' : 'Grant';
-    if (window.confirm(`Are you sure you want to ${action} ingestion permission for this user?`)) {
-      permissionMutation.mutate({ id, canTriggerIngestion: !currentState });
-    }
+    setConfirmDialog({
+      isOpen: true,
+      message: `Are you sure you want to ${action} ingestion permission for this user?`,
+      onConfirm: () => {
+        permissionMutation.mutate({ id, canTriggerIngestion: !currentState });
+        setConfirmDialog({ ...confirmDialog, isOpen: false });
+      },
+    });
   };
 
   return (
     <DashboardLayout>
       <h1 className="text-2xl font-bold mb-4">User Management</h1>
 
-      {/* Search and page size selection */}
+      {/* Search and pagination size */}
       <div className="flex justify-between mb-4">
         <input
           type="text"
@@ -74,7 +89,6 @@ export default function UsersPage() {
           }}
           className="border p-2 rounded"
         >
-          <option value={25}>25</option>
           <option value={50}>50</option>
           <option value={100}>100</option>
           <option value={150}>150</option>
@@ -110,8 +124,6 @@ export default function UsersPage() {
                       <option value="editor">Editor</option>
                       <option value="viewer">Viewer</option>
                     </select>
-
-                    {/* ✅ Show grant/revoke ingestion button only for non-viewers */}
                     {u.role !== 'viewer' && (
                       <button
                         onClick={() => handleToggleIngestion(u.id, u.canTriggerIngestion)}
@@ -137,9 +149,7 @@ export default function UsersPage() {
             >
               Prev
             </button>
-            <span className="px-3 py-1">
-              Page {page} / {totalPages}
-            </span>
+            <span className="px-3 py-1">Page {page} / {totalPages}</span>
             <button
               onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
               disabled={page === totalPages}
@@ -150,6 +160,14 @@ export default function UsersPage() {
           </div>
         </>
       )}
+
+      {/* Reusable Confirm Dialog */}
+      <ConfirmDialog
+        isOpen={confirmDialog.isOpen}
+        message={confirmDialog.message}
+        onConfirm={confirmDialog.onConfirm}
+        onCancel={() => setConfirmDialog({ ...confirmDialog, isOpen: false })}
+      />
     </DashboardLayout>
   );
 }
