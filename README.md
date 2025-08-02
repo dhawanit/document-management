@@ -13,9 +13,8 @@
 - [📜 API Documentation](#-api-documentation)
 - [👤 Default Admin Credentials](#-default-admin-credentials)
 - [🧪 Health Check](#-health-check)
-- [📜 License](#-license)
 - [🔮 Future Enhancements](#-future-enhancements)
-
+- [📜 License](#-license)
 - [👨‍💻 Author](#-author)
 
 ## 📌 Overview
