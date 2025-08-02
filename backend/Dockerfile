@@ -13,11 +13,9 @@ RUN npm install
 # Copy rest of the code
 COPY . .
 
-# Build the application
-RUN npm run start:dev
 
 # Expose backend port
 EXPOSE 3000
 
 # Run the app
-CMD ["npm", "run", "start:prod"]
+CMD ["npm", "run", "start:dev"]

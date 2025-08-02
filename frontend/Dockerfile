@@ -1,23 +1,16 @@
-# Stage 1: Build React app
-FROM node:20-alpine as build
+FROM node:20
 
 WORKDIR /app
+
+# Install dependencies
 COPY package*.json ./
 RUN npm install
+
+# Copy source code
 COPY . .
-RUN npm run dev
 
-# Stage 2: Serve static files using nginx
-FROM nginx:alpine
-
-# Remove default nginx content
-RUN rm -rf /usr/share/nginx/html/*
-
-# Copy build output
-COPY --from=build /app/dist /usr/share/nginx/html
-
-# Copy nginx config
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
+# Expose port
 EXPOSE 5173
-CMD ["nginx", "-g", "daemon off;"]
+
+# Run Vite dev server with host binding
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "5173"]
