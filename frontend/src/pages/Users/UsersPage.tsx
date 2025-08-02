@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient, UseQueryResult } from '@tanstack/react-query';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { fetchUsers, updateUserRole, updateUserPermission } from '../../api/userService';
 import { useAuth } from '../../context/AuthContext';
@@ -19,10 +19,11 @@ export default function UsersPage() {
     onConfirm: () => {},
   });
 
-  const { data = { data: [], total: 0, totalPages: 1 }, isLoading } = useQuery({
+  // Explicit typing for query result
+  const { data = { data: [], total: 0, totalPages: 1 }, isLoading }: UseQueryResult<any, Error> = useQuery({
     queryKey: ['users', page, limit, search],
     queryFn: () => fetchUsers(page, limit, search),
-    keepPreviousData: true,
+    placeholderData: (prev) => prev, // replacement for keepPreviousData
   });
 
   const roleMutation = useMutation({
