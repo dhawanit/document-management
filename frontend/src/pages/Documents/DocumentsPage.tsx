@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient, UseQueryResult } from '@tanstack/react-query';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import { fetchDocuments, uploadDocument, deleteDocument, updateDocument } from '../../api/documentService';
 import { useAuth } from '../../context/AuthContext';
@@ -11,17 +11,18 @@ export default function DocumentsPage() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
-  const { data: documents = [], isLoading } = useQuery({
+  // Added explicit typing for query result
+  const { data: documents = [], isLoading }: UseQueryResult<any[], Error> = useQuery({
     queryKey: ['documents'],
     queryFn: fetchDocuments,
   });
 
-  // ✅ Add Document state
+  // Add Document state
   const [addTitle, setAddTitle] = useState('');
   const [addDescription, setAddDescription] = useState('');
   const [addFile, setAddFile] = useState<File | null>(null);
 
-  // ✅ Edit Document state
+  // Edit Document state
   const [editTitle, setEditTitle] = useState('');
   const [editDescription, setEditDescription] = useState('');
   const [editFile, setEditFile] = useState<File | null>(null);
@@ -29,22 +30,22 @@ export default function DocumentsPage() {
   const [existingFilePath, setExistingFilePath] = useState('');
   const [showEditModal, setShowEditModal] = useState(false);
 
-  // ✅ Preview state
+  // Preview state
   const [previewUrl, setPreviewUrl] = useState('');
   const [fileType, setFileType] = useState('');
   const [showPreviewModal, setShowPreviewModal] = useState(false);
 
-  // ✅ TXT and DOCX text preview
+  // TXT and DOCX text preview
   const [textContent, setTextContent] = useState('');
 
-  // ✅ Confirm dialog state
+  // Confirm dialog state
   const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
     message: '',
     onConfirm: () => {},
   });
 
-  // ✅ Upload document
+  // Upload document
   const uploadMutation = useMutation({
     mutationFn: uploadDocument,
     onSuccess: () => {
@@ -55,7 +56,7 @@ export default function DocumentsPage() {
     },
   });
 
-  // ✅ Delete document
+  // Delete document
   const deleteMutation = useMutation({
     mutationFn: deleteDocument,
     onSuccess: () => {
@@ -64,7 +65,7 @@ export default function DocumentsPage() {
     },
   });
 
-  // ✅ Update document
+  // Update document
   const updateMutation = useMutation({
     mutationFn: ({ id, data }: { id: string; data: FormData }) => updateDocument(id, data),
     onSuccess: () => {
@@ -117,7 +118,7 @@ export default function DocumentsPage() {
     updateMutation.mutate({ id: editDocId, data: formData });
   };
 
-  // ✅ Preview document based on file type
+  // Preview document based on file type
   const handlePreview = async (doc: any) => {
     try {
       setTextContent('');
@@ -199,9 +200,9 @@ export default function DocumentsPage() {
           <button
             type="submit"
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-            disabled={uploadMutation.isLoading}
+            disabled={uploadMutation.isPending}
           >
-            {uploadMutation.isLoading ? 'Uploading...' : 'Upload'}
+            {uploadMutation.isPending ? 'Uploading...' : 'Upload'}
           </button>
         </form>
       )}

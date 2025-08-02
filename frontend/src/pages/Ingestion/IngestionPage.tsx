@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient, UseQueryResult } from '@tanstack/react-query';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import {
   fetchIngestionLogs,
@@ -26,11 +26,11 @@ export default function IngestionPage() {
     onConfirm: () => {},
   });
 
-  // Fetch ingestion logs
-  const { data: logsResponse = { data: [], total: 0, totalPages: 1 }, isLoading } = useQuery({
+  // ✅ Fetch ingestion logs with proper typing
+  const { data: logsResponse = { data: [], total: 0, totalPages: 1 }, isLoading }: UseQueryResult<any, Error> = useQuery({
     queryKey: ['ingestionLogs', statusFilter, search, page, limit],
     queryFn: () => fetchIngestionLogs(statusFilter, search, page, limit),
-    keepPreviousData: true,
+    placeholderData: (prev) => prev,
   });
 
   const logs = logsResponse.data ?? [];
@@ -215,11 +215,11 @@ export default function IngestionPage() {
           Prev
         </button>
         <span className="px-3 py-1">
-          Page {page} / {logsResponse.totalPages}
+          Page {page} / {logsResponse.totalPages ?? 1}
         </span>
         <button
-          onClick={() => setPage((prev) => Math.min(prev + 1, logsResponse.totalPages))}
-          disabled={page === logsResponse.totalPages}
+          onClick={() => setPage((prev) => Math.min(prev + 1, logsResponse.totalPages ?? 1))}
+          disabled={page === (logsResponse.totalPages ?? 1)}
           className="px-3 py-1 bg-gray-300 rounded disabled:opacity-50"
         >
           Next
