@@ -1,0 +1,381 @@
+{
+	"info": {
+		"_postman_id": "af3bb4f4-5364-4987-87d8-f7e7de1fd662",
+		"name": "document-management API Coll",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "2106625"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"username\":\"john\",\"email\":\"john@example.com\",\"password\":\"123456\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/auth/register"
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"email\":\"admin@document.com\",\"password\":\"Admin@123\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/auth/login"
+					},
+					"response": []
+				}
+			],
+			"description": "Authentication APIs"
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZThiZTY5Yi0yOTNlLTRlYjUtOWNiOS00NTlhMGI0YTVjYjQiLCJyb2xlIjoiYWRtaW4iLCJjYW5UcmlnZ2VySW5nZXN0aW9uIjp0cnVlLCJpYXQiOjE3NTM4OTE2NTQsImV4cCI6MTc1Mzg5NTI1NH0.9k6TWIg20cXOwQo1j8nzzOl0SpK4CfVe2d8uTKPgyus"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/users?page=1&limit=5&search=user278@example.com",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								},
+								{
+									"key": "search",
+									"value": "user278@example.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User role",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZThiZTY5Yi0yOTNlLTRlYjUtOWNiOS00NTlhMGI0YTVjYjQiLCJyb2xlIjoiYWRtaW4iLCJjYW5UcmlnZ2VySW5nZXN0aW9uIjp0cnVlLCJpYXQiOjE3NTM3OTA1MzEsImV4cCI6MTc1Mzc5NDEzMX0.7v5miCKB-mIp_Lyexi3y-VxgS5Qx2CZpFtqOq10U6Ug"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"role\":\"editor\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/users/89805018-7a80-42ea-84b6-9d219fc2a30d/role"
+					},
+					"response": []
+				},
+				{
+					"name": "Grant Ingestion Permission",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZThiZTY5Yi0yOTNlLTRlYjUtOWNiOS00NTlhMGI0YTVjYjQiLCJyb2xlIjoiYWRtaW4iLCJjYW5UcmlnZ2VySW5nZXN0aW9uIjp0cnVlLCJpYXQiOjE3NTM3OTA1MzEsImV4cCI6MTc1Mzc5NDEzMX0.7v5miCKB-mIp_Lyexi3y-VxgS5Qx2CZpFtqOq10U6Ug"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"canTriggerIngestion\":true}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/users/89805018-7a80-42ea-84b6-9d219fc2a30d/permissions"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Document",
+			"item": [
+				{
+					"name": "Upload Document",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNzIyNTQ1YS1lZDE1LTRjN2UtYjk4Ny1kMDg5ZjMxNjRhZWUiLCJyb2xlIjoidmlld2VyIiwiY2FuVHJpZ2dlckluZ2VzdGlvbiI6ZmFsc2UsImlhdCI6MTc1Mzc5MTgzNywiZXhwIjoxNzUzNzk1NDM3fQ.btRiGjfpHMEkPfJ2Nfsu8YuMUXm31GNoAO9SQZ-Nw0o"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "postman-cloud:///1f0695bb-4647-4bf0-88ee-885bb361ae44"
+								},
+								{
+									"key": "title",
+									"value": "Sample Doc",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Testing",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{baseUrl}}/documents"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Documents",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZThiZTY5Yi0yOTNlLTRlYjUtOWNiOS00NTlhMGI0YTVjYjQiLCJyb2xlIjoiYWRtaW4iLCJjYW5UcmlnZ2VySW5nZXN0aW9uIjp0cnVlLCJpYXQiOjE3NTM5NDUwNTMsImV4cCI6MTc1Mzk0ODY1M30.VrGdeOW_BYo_jMAzxE89tNn4WAlM_RNU7bcQCMXHSVI"
+							}
+						],
+						"url": "{{baseUrl}}/documents"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Document",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNzIyNTQ1YS1lZDE1LTRjN2UtYjk4Ny1kMDg5ZjMxNjRhZWUiLCJyb2xlIjoidmlld2VyIiwiY2FuVHJpZ2dlckluZ2VzdGlvbiI6ZmFsc2UsImlhdCI6MTc1Mzg1OTIxOSwiZXhwIjoxNzUzODYyODE5fQ.7tW_xdsGOmdrS0DfoPeJydeE6ZNBZthCUzuCiPoSlJk"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "postman-cloud:///1f0695bb-4647-4bf0-88ee-885bb361ae44"
+								},
+								{
+									"key": "title",
+									"value": "Updated Title",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Updated description",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{baseUrl}}/documents/b86805ce-0f6c-4320-a1d7-0d516d50d180"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Document",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmNjI1YjBiZS1kNmM0LTQxYTEtYWZmZi1jZmZmMjMxOWM0YWUiLCJyb2xlIjoidmlld2VyIiwiY2FuVHJpZ2dlckluZ2VzdGlvbiI6ZmFsc2UsImlhdCI6MTc1Mzg1ODU2MywiZXhwIjoxNzUzODYyMTYzfQ.__VASYjIcaG3q4L44FFOYJDMzFK2ES0PUtnYLuBirdQ"
+							}
+						],
+						"url": "{{baseUrl}}/documents/b86805ce-0f6c-4320-a1d7-0d516d50d180"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Ingestion",
+			"item": [
+				{
+					"name": "Trigger ingestion",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZThiZTY5Yi0yOTNlLTRlYjUtOWNiOS00NTlhMGI0YTVjYjQiLCJyb2xlIjoiYWRtaW4iLCJjYW5UcmlnZ2VySW5nZXN0aW9uIjp0cnVlLCJpYXQiOjE3NTM5NDg5ODksImV4cCI6MTc1Mzk1MjU4OX0.m72tMDj6QfWWg-ydFdsOYapEbZH-91F1Uf1kqm5fIZo"
+							}
+						],
+						"url": "{{baseUrl}}/ingestion/trigger/8e99836d-2e75-4a74-8091-13bacbbaae36"
+					},
+					"response": []
+				},
+				{
+					"name": "Check Status",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZThiZTY5Yi0yOTNlLTRlYjUtOWNiOS00NTlhMGI0YTVjYjQiLCJyb2xlIjoiYWRtaW4iLCJjYW5UcmlnZ2VySW5nZXN0aW9uIjp0cnVlLCJpYXQiOjE3NTM4NjA3NjgsImV4cCI6MTc1Mzg2NDM2OH0.0edtM_CZmrf5cz1N8RWrpxhUgaeKq5FvVp6TMfB_tA8"
+							}
+						],
+						"url": "{{baseUrl}}/ingestion/status/91a21015-fe59-40b1-891b-5da29accb89b"
+					},
+					"response": []
+				},
+				{
+					"name": "Ingestion history",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZThiZTY5Yi0yOTNlLTRlYjUtOWNiOS00NTlhMGI0YTVjYjQiLCJyb2xlIjoiYWRtaW4iLCJjYW5UcmlnZ2VySW5nZXN0aW9uIjp0cnVlLCJpYXQiOjE3NTM5NTA0NjgsImV4cCI6MTc1Mzk1NDA2OH0.-RTaIYZOPzgX8dKIinA051Ln1We3owWfEyDTrQoZFfo"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/ingestion/history?page=1&limit=100",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"ingestion",
+								"history"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retry Ingestion",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZThiZTY5Yi0yOTNlLTRlYjUtOWNiOS00NTlhMGI0YTVjYjQiLCJyb2xlIjoiYWRtaW4iLCJjYW5UcmlnZ2VySW5nZXN0aW9uIjp0cnVlLCJpYXQiOjE3NTM4NjA3NjgsImV4cCI6MTc1Mzg2NDM2OH0.0edtM_CZmrf5cz1N8RWrpxhUgaeKq5FvVp6TMfB_tA8"
+							}
+						],
+						"url": "{{baseUrl}}/ingestion/retry/91a21015-fe59-40b1-891b-5da29accb89b"
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel Ingestion",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZThiZTY5Yi0yOTNlLTRlYjUtOWNiOS00NTlhMGI0YTVjYjQiLCJyb2xlIjoiYWRtaW4iLCJjYW5UcmlnZ2VySW5nZXN0aW9uIjp0cnVlLCJpYXQiOjE3NTM4NjA3NjgsImV4cCI6MTc1Mzg2NDM2OH0.0edtM_CZmrf5cz1N8RWrpxhUgaeKq5FvVp6TMfB_tA8"
+							}
+						],
+						"url": "{{baseUrl}}/ingestion/cancel/91a21015-fe59-40b1-891b-5da29accb89b"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000",
+			"type": "string"
+		}
+	]
+}
